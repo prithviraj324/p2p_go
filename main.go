@@ -20,7 +20,7 @@ import (
 	golog "github.com/ipfs/go-log"
 
 	"github.com/davecgh/go-spew/spew"
-	libp2p "github.com/libp2p/go-libp2p"
+	libp2p "github.com/libp2p/go-libp2p" //@v0.24.2
 	crypto "github.com/libp2p/go-libp2p/core/crypto"
 	host "github.com/libp2p/go-libp2p/core/host"
 	net "github.com/libp2p/go-libp2p/core/network"
