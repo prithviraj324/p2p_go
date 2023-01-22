@@ -3,7 +3,6 @@ module github.com/prithviraj324/p2p_go
 go 1.19
 
 require (
-	github.com/davecgh/go-spew v1.1.1
 	github.com/ipfs/go-log v1.0.5
 	github.com/libp2p/go-libp2p v0.24.2
 	github.com/multiformats/go-multiaddr v0.8.0
