@@ -19,7 +19,6 @@ import (
 
 	golog "github.com/ipfs/go-log"
 
-	"github.com/davecgh/go-spew/spew"
 	libp2p "github.com/libp2p/go-libp2p" //@v0.24.2
 	crypto "github.com/libp2p/go-libp2p/core/crypto"
 	host "github.com/libp2p/go-libp2p/core/host"
@@ -76,9 +75,9 @@ func makeBasicHost(listenPort int, secio bool, randseed int64) (host.Host, error
 	log.Printf("Host address: %s \n", fullAddr)
 
 	if secio {
-		log.Printf("\nRun \"go run main.go -l %d -d %s -secio\" on a different terminal\n", listenPort+1, fullAddr)
+		log.Printf("\nRun \"go run main.go -l %d -d %s -secio\" on a different node\n", listenPort+1, fullAddr)
 	} else {
-		log.Printf("Run \"go run main.go -l %d -d %s\" on a different terminal\n", listenPort+1, fullAddr)
+		log.Printf("Run \"go run main.go -l %d -d %s\" on a different node\n", listenPort+1, fullAddr)
 	}
 
 	return basicHost, nil
@@ -119,6 +118,7 @@ func readData(rw *bufio.ReadWriter) {
 				if err != nil {
 					log.Fatal(err)
 				}
+				log.Print("Received new valid Data[]:")
 				fmt.Printf("\x1b[32m %s \x1b[0m> ", string(bytes)) //sets font color to green and resets to default
 			}
 			mutex.Unlock()
@@ -175,7 +175,11 @@ func writeData(rw *bufio.ReadWriter) {
 			log.Println(err)
 		}
 
-		spew.Dump(Data)
+		for _, blk := range Data {
+			fmt.Printf("Index: %d,\t", blk.Index)
+			fmt.Printf("Content: %s\n", blk.Content)
+		}
+		//spew.Dump(Data)
 
 		mutex.Lock()
 		rw.WriteString(fmt.Sprintf("%s\n", string(bytes)))
