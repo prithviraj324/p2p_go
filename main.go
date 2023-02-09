@@ -4,11 +4,15 @@ import (
 	"bufio"
 	"context"
 	"crypto/rand"
+	"io/ioutil"
 
 	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
+
+	"net/http"
+
 	"log"
 	mrand "math/rand"
 	"os"
@@ -28,6 +32,27 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 	merkle "github.com/prithviraj324/p2p_go/merkle_hash"
 )
+
+type IP struct {
+	Query string
+}
+
+func getip2() string {
+	req, err := http.Get("http://ip-api.com/json/")
+	if err != nil {
+		return err.Error()
+	}
+	defer req.Body.Close()
+
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		return err.Error()
+	}
+	var ip IP
+	json.Unmarshal(body, &ip)
+	// fmt.Print(ip.Query)
+	return ip.Query
+}
 
 var Data []merkle.Block
 
@@ -49,8 +74,12 @@ func makeBasicHost(listenPort int, secio bool, randseed int64) (host.Host, error
 		return nil, err
 	}
 
+	localIP := getip2() //get host ip address
+
+	//In order to use it on local machine connected to router, use m=0.0.0.0 or 127.0.0.1
+	//localIP = "127.0.0.1"
 	opts := []libp2p.Option{
-		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", listenPort)),
+		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/%s/tcp/%d", localIP, listenPort)),
 		libp2p.Identity(priv),
 	}
 
