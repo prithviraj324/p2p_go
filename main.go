@@ -77,7 +77,7 @@ func makeBasicHost(listenPort int, secio bool, randseed int64) (host.Host, error
 	localIP := getip2() //get host ip address
 
 	//In order to use it on local machine connected to router, use m=0.0.0.0 or 127.0.0.1
-	//localIP = "127.0.0.1"
+	localIP = "127.0.0.1"
 	opts := []libp2p.Option{
 		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/%s/tcp/%d", localIP, listenPort)),
 		libp2p.Identity(priv),
